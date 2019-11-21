@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default.html}">
+<head>
+<title>FDADI</title>
+</head>
+<body>
+	<div class="container" layout:fragment="content">
+		<div class="jumbotron">
+			<h1 class="display-4">FDADI</h1>
+		</div>
+				
+		<div th:if="${errorMessage}" class="mb-3 alert alert-danger" th:text="${errorMessage}"></div>
+
+		<div class="row mt-3">
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<p class="alert alert-primary card-text text-center">FDADI...please click [Demo Login] above</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

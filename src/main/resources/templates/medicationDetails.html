@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default.html}">
+<head>
+<title>Medication Details</title>
+</head>
+<body>
+	<div class="container" layout:fragment="content">
+		<div class="accordion mt-3" id="medDetails">
+			<div class="card">
+				<div class="card-header" id="heading1">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">Brand Names</button>
+					</h2>
+				</div>
+
+				<div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].openfda.brandName}"></div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="heading2">
+					<h2 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">Generic
+							Names</button>
+					</h2>
+				</div>
+				<div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].openfda.genericName}"></div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="heading3">
+					<h2 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">Dosage
+							and Administration</button>
+					</h2>
+				</div>
+				<div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].dosageAndAdministration}"></div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="heading4">
+					<h2 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">Indications and
+							Usage</button>
+					</h2>
+				</div>
+				<div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].indicationsAndUsage}"></div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="heading5">
+					<h2 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">Drug
+							Interactions</button>
+					</h2>
+				</div>
+				<div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].drugInteractions}"></div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header" id="heading6">
+					<h2 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse6" aria-expanded="false" aria-controls="collapse6">Adverse
+							Reactions Table</button>
+					</h2>
+				</div>
+				<div id="collapse6" class="collapse" aria-labelledby="heading6" data-parent="#medDetails">
+					<div class="card-body" th:text="${medicationDetails.results[0].adverseReactionsTable}"></div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.js"></script>
+
+		<script th:inline="javascript">
+			$.fn.extend({
+				fixText : function() {
+					var text = $(this).find('.card-body').text();
+					var fixedText = text.slice(1,-1);
+					$(this).find('.card-body').text(fixedText);
+				}
+			});
+			
+			$.fn.extend({
+				fixHtml : function() {
+					var text = $(this).find('.card-body').text();
+					var fixedText = text.slice(1,-1);
+					$(this).find('.card-body').html(fixedText);
+				}
+			});
+
+			$(document).ready(function() {
+				$('#collapse1').fixText();
+				$('#collapse2').fixText();
+				$('#collapse3').fixText();
+				$('#collapse4').fixText();
+				$('#collapse5').fixText();
+				$('#collapse6').fixHtml();
+			});
+		</script>
+
+	</th:block>
+
+</body>
+</html>
