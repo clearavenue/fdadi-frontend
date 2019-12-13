@@ -63,35 +63,10 @@ public class FDADIController {
 	// simulate login
 	@GetMapping("/login")
 	public final String login(final HttpSession session, final ModelMap model) {
-		try {
-			registerUser("DemoUser", "DemoPassword");
-		} catch (final RetryExhaustedException e) {
-			log.warn("Could not connect to FDADI-USER-SERVICE within retry period");
-			model.addAttribute("errorMessage", "FDADI-USER-SERVICE not available, try again in a few minutes");
-			return "index";
-		}
+		userService.deleteAll();
+		userService.save(UserProfile.builder().userId("DemoUser").password("DemoPassword1").build());
 		session.setAttribute("username", "DemoUser");
 		return "redirect:/homepage";
-	}
-
-	/**
-	 * Register.
-	 *
-	 * @param username the username
-	 * @param pwd      the pwd
-	 * @return true, if successful
-	 */
-	private boolean registerUser(final String username, final String pwd) {
-		boolean result = false;
-
-		final Optional<UserProfile> existingUser = userService.findByUserId(username);
-		if (existingUser.isEmpty()) {
-			log.debug("registerUser - user not found so saving");
-			userService.save(UserProfile.builder().userId(username).password(pwd).build());
-			result = true;
-		}
-
-		return result;
 	}
 
 	@GetMapping("/logout")

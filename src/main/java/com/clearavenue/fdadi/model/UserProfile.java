@@ -38,6 +38,7 @@ public class UserProfile {
 
 	/** The medications. */
 	@Builder.Default
+	@EqualsAndHashCode.Exclude
 	private List<Medication> medications = new ArrayList<>();
 
 	@Override

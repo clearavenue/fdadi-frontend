@@ -33,4 +33,12 @@ public class UserProfileService {
 		return webclientBuilder.build().post().uri(uri).bodyValue(user).retrieve().bodyToMono(UserProfile.class).block();
 	}
 
+	public void deleteAll() {
+		final String uri = "http://FDADI-USER-SERVICE/deleteAll";
+		final String result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(String.class)
+				.retryWhen(Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-USER-SERVICE again...")))
+				.block();
+		log.info("deleteAll = {}", result);
+	}
+
 }
