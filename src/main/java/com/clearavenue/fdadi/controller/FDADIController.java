@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +28,7 @@ import com.clearavenue.fdadi.service.MedicationService;
 import com.clearavenue.fdadi.service.PharmClassService;
 import com.clearavenue.fdadi.service.UserProfileService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.retry.RetryExhaustedException;
 
@@ -36,17 +36,15 @@ import reactor.retry.RetryExhaustedException;
  * The Class FDADIController.
  */
 @Controller
+@RequiredArgsConstructor
 @Slf4j
 public class FDADIController {
 
-	@Autowired
-	UserProfileService userService;
+	private final UserProfileService userService;
 
-	@Autowired
-	MedicationService medService;
+	private final MedicationService medService;
 
-	@Autowired
-	PharmClassService pharmService;
+	private final PharmClassService pharmService;
 
 	/**
 	 * Index.
@@ -57,35 +55,49 @@ public class FDADIController {
 	 */
 	@GetMapping("/")
 	public final String index(final HttpSession session, final ModelMap model) {
+		log.debug("/ - showing index");
 		return "index";
 	}
 
 	// simulate login
 	@GetMapping("/login")
 	public final String login(final HttpSession session, final ModelMap model) {
+		log.debug("start /login");
+		log.debug("calling delete all");
 		userService.deleteAll();
+		log.debug("saving user");
 		userService.save(UserProfile.builder().userId("DemoUser").password("DemoPassword1").build());
+		log.debug("setting attribute");
 		session.setAttribute("username", "DemoUser");
+		log.debug("end /login - redirect /homepage");
 		return "redirect:/homepage";
 	}
 
 	@GetMapping("/logout")
 	public final String logout(final HttpSession session, final ModelMap model) {
+		log.debug("start /logout");
+		log.debug("remove username attrib");
 		session.removeAttribute("username");
+		log.debug("end /logout - redirect /");
 		return "redirect:/";
 	}
 
 	@GetMapping("/homepage")
 	public final String homepage(final HttpSession session, final ModelMap model) {
+		log.debug("start /homepage");
+
+		log.debug("get username from session");
 		// check if logged in and if not redirect to login
 		final String loggedInUsername = (String) session.getAttribute("username");
 		if (StringUtils.isBlank(loggedInUsername)) {
+			log.debug("username not found in session, display index");
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return "index";
 		}
 
 		Optional<UserProfile> loggedInUser = Optional.empty();
 		try {
+			log.debug("calling user service to findbyuserId");
 			loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
 		} catch (final RetryExhaustedException e) {
 			log.warn("Could not connect to FDADI-USER-SERVICE within retry period");
@@ -105,6 +117,7 @@ public class FDADIController {
 		userMeds.stream().map(med -> med.getMedicationName()).forEach(userMedList::add);
 		log.debug("/ - userMedList:{}", userMedList.size());
 
+		log.debug("end /homepage now display homepage");
 		return "homepage";
 	}
 

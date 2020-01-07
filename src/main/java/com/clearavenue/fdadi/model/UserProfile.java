@@ -6,10 +6,6 @@ package com.clearavenue.fdadi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,16 +15,14 @@ import lombok.NoArgsConstructor;
 /**
  * The Class UserProfile.
  */
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 public class UserProfile {
 
-	@Id
 	@EqualsAndHashCode.Exclude
-	private ObjectId id;
+	private Long id;
 
 	/** The user id. */
 	private String userId;

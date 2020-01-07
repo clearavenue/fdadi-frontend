@@ -1,6 +1,11 @@
 /target/
 *.log
 
+### my files ###
+build-and-run.sh
+run.sh
+build.sh
+
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

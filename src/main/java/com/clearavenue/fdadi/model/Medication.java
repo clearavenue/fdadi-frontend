@@ -3,10 +3,6 @@
  */
 package com.clearavenue.fdadi.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,16 +12,14 @@ import lombok.NoArgsConstructor;
 /**
  * The Class AllMedications.
  */
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 public class Medication implements Comparable<Medication> {
 
-	@Id
 	@EqualsAndHashCode.Exclude
-	private ObjectId id;
+	private Long id;
 
 	private String medicationName;
 
@@ -42,5 +36,4 @@ public class Medication implements Comparable<Medication> {
 	public int compareTo(final Medication o) {
 		return medicationName.compareTo(o.getMedicationName());
 	}
-
 }

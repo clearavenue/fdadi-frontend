@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class GetUserResult {
+public class UserResult {
 
 	private Optional<UserProfile> user;
 }

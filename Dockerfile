@@ -1,9 +1,12 @@
-FROM maven:3.6.2-jdk-11 as BUILDER
+# build
+FROM maven:latest as BUILDER
 ADD . /build
 WORKDIR /build
-RUN mvn clean package
+ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+RUN mvn -B -e -T 1C verify
 
+# package without maven
 FROM openjdk:11-oracle
 EXPOSE 8081
-ADD /target/*.jar app.jar
+COPY --from=BUILDER /build/target/fdadi-frontend.jar app.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
