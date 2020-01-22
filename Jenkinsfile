@@ -71,12 +71,14 @@ spec:
             }    
           }
           post {
+            always {
               recordIssues(enabledForFailure: false, tool: checkStyle(pattern: 'target/checkstyle-result.xml'))
+            }
           }
         }                
       }
     }
-
+    
     stage('JUnit') {
       steps {
         container('maven') {
