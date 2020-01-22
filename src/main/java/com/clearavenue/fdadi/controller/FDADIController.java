@@ -96,9 +96,8 @@ public class FDADIController {
 		}
 
 		try {
-			Optional<UserProfile> loggedInUser = Optional.empty();
 			log.debug("calling user service to findbyuserId");
-			loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
+			final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
 			final UserProfile user = loggedInUser.get();
 			log.debug("/ - {} is logged in", user.getUserId());
 
