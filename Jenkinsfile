@@ -95,12 +95,12 @@ spec:
             container('maven') {
               sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.4:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.4:report"
               jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: true, 
-                 minimumInstructionCoverage : '30', maximumInstructionCoverage : '40',
-                 minimumBranchCoverage : '30', maximumBranchCoverage : '30',
-                 minimumComplexityCoverage : '30', maximumComplexityCoverage : '50',
-                 minimumLineCoverage : '30', maximumLineCoverage : '50',
-                 minimumMethodCoverage : '30', maximumMethodCoverage : '50',
-                 minimumClassCoverage : '30', maximumClassCoverage : '50')
+                 minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
+                 minimumBranchCoverage : '30', maximumBranchCoverage : '31',
+                 minimumComplexityCoverage : '30', maximumComplexityCoverage : '31',
+                 minimumLineCoverage : '30', maximumLineCoverage : '31',
+                 minimumMethodCoverage : '30', maximumMethodCoverage : '31',
+                 minimumClassCoverage : '30', maximumClassCoverage : '31')
             }
           }
         }
