@@ -3,6 +3,8 @@
  */
 package com.clearavenue.fdadi.model;
 
+import java.util.Locale;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,7 @@ public class PharmClass {
 		String pharmClassName;
 
 		public PharmClassBuilder pharmClassName(final String text) {
-			this.pharmClassName = text.toUpperCase();
+			this.pharmClassName = text.toUpperCase(Locale.getDefault());
 			return this;
 		}
 	}

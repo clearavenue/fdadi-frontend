@@ -3,6 +3,8 @@
  */
 package com.clearavenue.fdadi.model;
 
+import java.util.Locale;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,7 @@ public class Medication implements Comparable<Medication> {
 		String medicationName;
 
 		public MedicationBuilder medicationName(final String text) {
-			this.medicationName = text.toUpperCase();
+			this.medicationName = text.toUpperCase(Locale.getDefault());
 			return this;
 		}
 	}
