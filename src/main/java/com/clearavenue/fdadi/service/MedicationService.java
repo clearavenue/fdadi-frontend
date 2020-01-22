@@ -1,6 +1,7 @@
 package com.clearavenue.fdadi.service;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class MedicationService {
 		final AllMedicationsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(AllMedicationsResult.class).retryWhen(
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
-		return result.getMedications();
+		return result == null ? Collections.emptyList() : result.getMedications();
 	}
 
 	public void addUserMedication(final UserProfile user, final String medicationName) {
@@ -39,7 +40,7 @@ public class MedicationService {
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
 
-		final Optional<Medication> medication = result.getMedication();
+		final Optional<Medication> medication = result == null ? Optional.empty() : result.getMedication();
 		if (medication.isPresent() && !user.getMedications().contains(medication.get())) {
 			user.getMedications().add(medication.get());
 		}
@@ -51,7 +52,7 @@ public class MedicationService {
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
 
-		final Optional<Medication> medication = result.getMedication();
+		final Optional<Medication> medication = result == null ? Optional.empty() : result.getMedication();
 		if (medication.isPresent() && user.getMedications().contains(medication.get())) {
 			user.getMedications().remove(medication.get());
 		}
@@ -62,7 +63,7 @@ public class MedicationService {
 		final MedicationDetailsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(MedicationDetailsResult.class).retryWhen(
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
-		return result.getLabelResult();
+		return result == null ? LabelResult.builder().build() : result.getLabelResult();
 	}
 
 }

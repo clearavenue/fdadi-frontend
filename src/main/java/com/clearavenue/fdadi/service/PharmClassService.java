@@ -1,6 +1,7 @@
 package com.clearavenue.fdadi.service;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PharmClassService {
 		final AllPharmClassesResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(AllPharmClassesResult.class).retryWhen(
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
-		return result.getPharmClasses();
+		return result == null ? Collections.emptyList() : result.getPharmClasses();
 	}
 
 	public List<Medication> findByPharmClass(final String pharmClass) {
@@ -35,7 +36,7 @@ public class PharmClassService {
 		final MedicationsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(MedicationsResult.class).retryWhen(
 				Retry.any().exponentialBackoff(Duration.ofSeconds(2), Duration.ofSeconds(30)).retryMax(5).doOnRetry(r -> log.info("Trying FDADI-MEDICATION-SERVICE again...")))
 				.block();
-		return result.getMedications();
+		return result == null ? Collections.emptyList() : result.getMedications();
 	}
 
 }
