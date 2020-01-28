@@ -15,6 +15,7 @@ public class VersionController {
 
 	@RequestMapping(value = "/version", method = RequestMethod.GET)
 	public String getVersion() {
-		return buildProperties.getVersion();
+		final String version = String.format("%s : %s", buildProperties.getArtifact(), buildProperties.getVersion());
+		return version;
 	}
 }

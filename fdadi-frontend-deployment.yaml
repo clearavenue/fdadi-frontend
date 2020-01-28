@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: fdadi-frontend
-          image: clearavenuedocker/fdadi-frontend:1.0
+          image: clearavenuedocker/fdadi-frontend:latest
           #Tells the deployment to always pull the image from dockerhub, even if already present on the machine
           imagePullPolicy: Always
           #Tells kubernetes to run any commands as root (required for some volume mounts, if no volumes are necessary delete securityContext section
