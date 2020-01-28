@@ -60,6 +60,7 @@ spec:
           steps {
             container('docker') {
               sh "docker build -t ${dockerImage}:${VERSION} ."
+              sh "docker build -t ${dockerImage}:latest ."              
             }
           }
         }
@@ -156,6 +157,8 @@ spec:
             docker.withRegistry('', 'docker') {
 	          sh "docker push ${dockerImage}:${VERSION}"
 	          sh "docker rmi ${dockerImage}:${VERSION}"
+	          sh "docker push ${dockerImage}:latest"
+	          sh "docker rmi ${dockerImage}:latest"		          
 	        }                           
 	      }
 	    }
