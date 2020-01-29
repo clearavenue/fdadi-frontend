@@ -94,25 +94,19 @@ public class FDADIController {
 			return "index";
 		}
 
-		try {
-			log.debug("calling user service to findbyuserId");
-			final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
-			final UserProfile user = loggedInUser.get();
-			log.debug("/ - {} is logged in", user.getUserId());
+		log.debug("calling user service to findbyuserId");
+		final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
+		final UserProfile user = loggedInUser.get();
+		log.debug("/ - {} is logged in", user.getUserId());
 
-			final List<Medication> userMeds = user.getMedications();
-			Collections.sort(userMeds);
-			model.addAttribute("medList", userMeds);
-			log.debug("/ - medList:{}", userMeds.size());
+		final List<Medication> userMeds = user.getMedications();
+		Collections.sort(userMeds);
+		model.addAttribute("medList", userMeds);
+		log.debug("/ - medList:{}", userMeds.size());
 
-			final List<String> userMedList = new ArrayList<>();
-			userMeds.stream().map(med -> med.getMedicationName()).forEach(userMedList::add);
-			log.debug("/ - userMedList:{}", userMedList.size());
-		} catch (final Exception e) {
-			log.warn("Could not connect to FDADI-USER-SERVICE within retry period");
-			model.addAttribute("errorMessage", "FDADI-USER-SERVICE not available, try again in a few minutes");
-			return "redirect:/logout";
-		}
+		final List<String> userMedList = new ArrayList<>();
+		userMeds.stream().map(med -> med.getMedicationName()).forEach(userMedList::add);
+		log.debug("/ - userMedList:{}", userMedList.size());
 
 		log.debug("end /homepage now display homepage");
 		return "homepage";
@@ -148,14 +142,8 @@ public class FDADIController {
 
 		model.addAttribute("selected", new SelectedValues());
 
-		try {
-			final List<Medication> all = medService.findAll();
-			model.addAttribute("allMeds", all);
-		} catch (final Exception e) {
-			log.warn("Could not connect to FDADI-MEDICATION-SERVICE within retry period");
-			model.addAttribute("errorMessage", "FDADI-MEDICATION-SERVICE not available, try again in a few minutes");
-			return "homepage";
-		}
+		final List<Medication> all = medService.findAll();
+		model.addAttribute("allMeds", all);
 
 		return "addMedByName";
 	}
