@@ -1,6 +1,7 @@
 def dockerImage = "clearavenuedocker/fdadi-frontend"
 def builtImg = ''
 def SERVER_URL="http://a3fd36bd80a9747afb9405ff3ad944b2-354023137.us-east-1.elb.amazonaws.com"
+def deploymentFile = "fdadi-frontend-deployment.yaml"
 
 pipeline {
   agent {
@@ -170,8 +171,8 @@ spec:
  	    container('kubectl') {
  	      script {
 	        withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
-	          sh "sed -i 's/:latest/:${VERSION}/' fdadi-discovery-deployment.yaml"
-	          sh "kubectl apply -f fdadi-frontend-deployment.yaml"
+	          sh "sed -i 's/:latest/:${VERSION}/' ${deploymentFile}"
+	          sh "kubectl apply -f ${deploymentFile}"
 	        }
 	      }      
 	    }
