@@ -12,7 +12,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +27,9 @@ import com.clearavenue.fdadi.service.MedicationService;
 import com.clearavenue.fdadi.service.PharmClassService;
 import com.clearavenue.fdadi.service.UserProfileService;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import reactor.retry.RetryExhaustedException;
 
 /**
  * The Class FDADIController.
@@ -109,7 +108,7 @@ public class FDADIController {
 			final List<String> userMedList = new ArrayList<>();
 			userMeds.stream().map(med -> med.getMedicationName()).forEach(userMedList::add);
 			log.debug("/ - userMedList:{}", userMedList.size());
-		} catch (final RetryExhaustedException e) {
+		} catch (final Exception e) {
 			log.warn("Could not connect to FDADI-USER-SERVICE within retry period");
 			model.addAttribute("errorMessage", "FDADI-USER-SERVICE not available, try again in a few minutes");
 			return "redirect:/logout";
@@ -152,7 +151,7 @@ public class FDADIController {
 		try {
 			final List<Medication> all = medService.findAll();
 			model.addAttribute("allMeds", all);
-		} catch (final RetryExhaustedException e) {
+		} catch (final Exception e) {
 			log.warn("Could not connect to FDADI-MEDICATION-SERVICE within retry period");
 			model.addAttribute("errorMessage", "FDADI-MEDICATION-SERVICE not available, try again in a few minutes");
 			return "homepage";
