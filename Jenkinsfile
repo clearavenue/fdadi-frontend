@@ -60,7 +60,6 @@ spec:
           steps {
             container('docker') {
               sh "docker build -t ${dockerImage}:${VERSION} ."
-              sh "docker build -t ${dockerImage}:latest ."              
             }
           }
         }
@@ -157,8 +156,6 @@ spec:
             docker.withRegistry('', 'docker') {
 	          sh "docker push ${dockerImage}:${VERSION}"
 	          sh "docker rmi ${dockerImage}:${VERSION}"
-	          sh "docker push ${dockerImage}:latest"
-	          sh "docker rmi ${dockerImage}:latest"		          
 	        }                           
 	      }
 	    }
@@ -173,6 +170,7 @@ spec:
  	    container('kubectl') {
  	      script {
 	        withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
+	          sh "sed -i 's/:latest/:${VERSION}/' fdadi-discovery-deployment.yaml"
 	          sh "kubectl apply -f fdadi-frontend-deployment.yaml"
 	        }
 	      }      
