@@ -24,17 +24,13 @@ spec:
           imagePullPolicy: Always
           livenessProbe:
             initialDelaySeconds: 90
-            exec:
-              command:
-              - wget
-              - -qO-
-              - http://localhost:8080/actuator/health
+            httpGet:
+              path: /actuator/health
+              port: 8080
           readinessProbe:
-            exec:
-              command:
-              - wget
-              - -qO-
-              - http://localhost:8080/
+            httpGet:
+              path: /
+              port: 8080
           #env:
           #  - name: {env-variable-name}
           #    value: "{env-variable-value}"
