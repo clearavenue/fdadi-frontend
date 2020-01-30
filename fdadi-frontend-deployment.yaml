@@ -29,26 +29,27 @@ spec:
       containers:
         - name: fdadi-frontend
           image: clearavenuedocker/fdadi-frontend:latest
-          #Tells the deployment to always pull the image from dockerhub, even if already present on the machine
           imagePullPolicy: Always
-          #Tells kubernetes to run any commands as root (required for some volume mounts, if no volumes are necessary delete securityContext section
-          #securityContext:
-          #  runAsUser: 0
+          livenessProbe:
+            initialDelaySeconds: 90
+            exec:
+              command:
+              - wget
+              - -qO-
+              - http://localhost:8080/actuator/health
+          readinessProbe:
+            exec:
+              command:
+              - wget
+              - -qO-
+              - http://localhost:8080/
           #env:
           #  - name: {env-variable-name}
           #    value: "{env-variable-value}"
           ports:
             - name: user-service
               containerPort: 8081
-          #volumeMounts:
-          #  - name: {volume-name}
-          #    mountPath: {volume-mount-path-in-container}
-      #volumes:
-      #  - name: {volume-name}
-      #    hostPath:
-      #      path: {volume-mount-path-host-machine}
-            #specifies that the volume will create a directory, at the specified path, on the host machine to store data 
-      #      type: DirectoryOrCreate
+
 ---
 apiVersion: v1
 kind: Service
