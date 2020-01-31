@@ -148,9 +148,6 @@ spec:
     }
 
     stage('Push Docker') {
-      when {
-        expression { currentBuild.result == 'SUCCESS' }
-      }
       steps {
 	    container('docker') {
 	      script {
@@ -164,9 +161,6 @@ spec:
 	}
     
     stage('Deploy') {
-      when {
-        expression { currentBuild.result == 'SUCCESS' }
-      }
 	  steps {
  	    container('kubectl') {
  	      script {
