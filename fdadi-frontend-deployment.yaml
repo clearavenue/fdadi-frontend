@@ -29,7 +29,7 @@ spec:
               port: 8081
           readinessProbe:
             httpGet:
-              path: /
+              path: /actuator/health
               port: 8081
           #env:
           #  - name: {env-variable-name}
