@@ -16,18 +16,18 @@ public class UserProfileService {
 	WebClient.Builder webclientBuilder;
 
 	public Optional<UserProfile> findByUserId(final String username) {
-		final String uri = String.format("http://FDADI-USER-SERVICE/user/%s", username);
+		final String uri = String.format("http://fdadi-user-service/user/%s", username);
 		final UserResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(UserResult.class).block();
 		return result == null ? Optional.empty() : result.getUser();
 	}
 
 	public UserProfile save(final UserProfile user) {
-		final String uri = "http://FDADI-USER-SERVICE/saveUser";
+		final String uri = "http://fdadi-user-service/saveUser";
 		return webclientBuilder.build().post().uri(uri).bodyValue(user).retrieve().bodyToMono(UserProfile.class).block();
 	}
 
 	public void deleteAll() {
-		final String uri = "http://FDADI-USER-SERVICE/deleteAll";
+		final String uri = "http://fdadi-user-service/deleteAll";
 		webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(String.class).block();
 	}
 
