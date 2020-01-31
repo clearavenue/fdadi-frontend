@@ -22,13 +22,13 @@ public class MedicationService {
 	WebClient.Builder webclientBuilder;
 
 	public List<Medication> findAll() {
-		final String uri = "http://FDADI-MEDICATION-SERVICE/allMedications";
+		final String uri = "http://fdadi-medication-service:8083/allMedications";
 		final AllMedicationsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(AllMedicationsResult.class).block();
 		return result == null ? Collections.emptyList() : result.getMedications();
 	}
 
 	public void addUserMedication(final UserProfile user, final String medicationName) {
-		final String uri = String.format("http://FDADI-MEDICATION-SERVICE/medication/%s", medicationName);
+		final String uri = String.format("http://fdadi-medication-service:8083/medication/%s", medicationName);
 		final GetMedicationResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(GetMedicationResult.class).block();
 
 		final Optional<Medication> medication = result == null ? Optional.empty() : result.getMedication();
@@ -38,7 +38,7 @@ public class MedicationService {
 	}
 
 	public void removeUserMedication(final UserProfile user, final String medicationName) {
-		final String uri = String.format("http://FDADI-MEDICATION-SERVICE/medication/%s", medicationName);
+		final String uri = String.format("http://fdadi-medication-service:8083/medication/%s", medicationName);
 		final GetMedicationResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(GetMedicationResult.class).block();
 
 		final Optional<Medication> medication = result == null ? Optional.empty() : result.getMedication();
@@ -48,7 +48,7 @@ public class MedicationService {
 	}
 
 	public LabelResult getDetails(final String medicationName) {
-		final String uri = String.format("http://FDADI-MEDICATION-SERVICE/medicationDetails/%s", medicationName);
+		final String uri = String.format("http://fdadi-medication-service:8083/medicationDetails/%s", medicationName);
 		final MedicationDetailsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(MedicationDetailsResult.class).block();
 		return result == null ? LabelResult.builder().build() : result.getLabelResult();
 	}
