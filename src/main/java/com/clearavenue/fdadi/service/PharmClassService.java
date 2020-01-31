@@ -19,13 +19,13 @@ public class PharmClassService {
 	WebClient.Builder webclientBuilder;
 
 	public List<PharmClass> findAll() {
-		final String uri = "http://FDADI-MEDICATION-SERVICE/allPharmClasses";
+		final String uri = "http://fdadi-medication-service:8083/allPharmClasses";
 		final AllPharmClassesResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(AllPharmClassesResult.class).block();
 		return result == null ? Collections.emptyList() : result.getPharmClasses();
 	}
 
 	public List<Medication> findByPharmClass(final String pharmClass) {
-		final String uri = String.format("http://FDADI-MEDICATION-SERVICE/medicationsByPharmClass/%s", pharmClass);
+		final String uri = String.format("http://fdadi-medication-service:8083/medicationsByPharmClass/%s", pharmClass);
 		final MedicationsResult result = webclientBuilder.build().get().uri(uri).retrieve().bodyToMono(MedicationsResult.class).block();
 		return result == null ? Collections.emptyList() : result.getMedications();
 	}
