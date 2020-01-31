@@ -171,6 +171,7 @@ spec:
  	    container('kubectl') {
  	      script {
 	        withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
+	          sh "kubectl delete -f ${deploymentFile}"
 	          sh "sed -i 's/:latest/:${VERSION}/' ${deploymentFile}"
 	          sh "kubectl apply -f ${deploymentFile}"
 	        }
