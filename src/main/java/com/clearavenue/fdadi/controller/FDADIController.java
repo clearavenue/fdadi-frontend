@@ -52,9 +52,9 @@ public class FDADIController {
 	 * @param model the map
 	 * @return the string
 	 */
-	@GetMapping("/")
+	@GetMapping("/app")
 	public final String index(final HttpSession session, final ModelMap model) {
-		log.debug("/ - showing index");
+		log.debug("/app - showing index");
 		return "index";
 	}
 
@@ -77,8 +77,8 @@ public class FDADIController {
 		log.debug("start /logout");
 		log.debug("remove username attrib");
 		session.removeAttribute("username");
-		log.debug("end /logout - redirect /");
-		return "redirect:/";
+		log.debug("end /logout - redirect /app");
+		return "redirect:/app";
 	}
 
 	@GetMapping("/homepage")
