@@ -148,9 +148,6 @@ spec:
     }
 
     stage('Push Docker') {
-      when {
-        expression { currentBuild.result == 'SUCCESS' }
-      }
       steps {
 	    container('docker') {
 	      script {
@@ -164,13 +161,11 @@ spec:
 	}
     
     stage('Deploy') {
-      when {
-        expression { currentBuild.result == 'SUCCESS' }
-      }
 	  steps {
  	    container('kubectl') {
  	      script {
 	        withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
+	          sh "kubectl delete -f ${deploymentFile}"
 	          sh "sed -i 's/:latest/:${VERSION}/' ${deploymentFile}"
 	          sh "kubectl apply -f ${deploymentFile}"
 	        }

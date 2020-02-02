@@ -43,7 +43,7 @@ public class FDADIControllerTest {
 
 	@Test
 	public void getHome() throws Exception {
-		this.mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+		this.mockMvc.perform(get("/app")).andExpect(status().isOk()).andExpect(view().name("index"));
 		assertTrue(true, "should always be true");
 	}
 
