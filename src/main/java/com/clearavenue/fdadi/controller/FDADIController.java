@@ -66,6 +66,7 @@ public class FDADIController {
 		// userService.deleteAll();
 		log.debug("saving user");
 		userService.save(UserProfile.builder().userId("DemoUser").password("DemoPassword1").build());
+		userService.save(UserProfile.builder().userId("DemoUser2").password("DemoPassword2").build());
 		log.debug("setting attribute");
 		session.setAttribute("username", "DemoUser");
 		log.debug("end /login - redirect /homepage");
