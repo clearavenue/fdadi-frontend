@@ -70,7 +70,7 @@ public class FDADIController {
 		log.debug("setting attribute");
 		session.setAttribute("username", "DemoUser");
 		log.debug("end /login - redirect /homepage");
-		return "redirect:/homepage";
+		return "redirect:homepage";
 	}
 
 	@GetMapping("/logout")
@@ -79,7 +79,7 @@ public class FDADIController {
 		log.debug("remove username attrib");
 		session.removeAttribute("username");
 		log.debug("end /logout - redirect /app");
-		return "redirect:/app";
+		return "redirect:app";
 	}
 
 	@GetMapping("/homepage")
@@ -174,7 +174,7 @@ public class FDADIController {
 			userService.save(user);
 		}
 
-		return "redirect:/homepage";
+		return "redirect:homepage";
 	}
 
 	@GetMapping("/removeMedication/{medicationName}")
@@ -192,7 +192,7 @@ public class FDADIController {
 		medService.removeUserMedication(user, medicationName);
 		userService.save(user);
 
-		return "redirect:/homepage";
+		return "redirect:homepage";
 	}
 
 	@GetMapping("/medicationDetails/{medicationName}")
@@ -207,7 +207,7 @@ public class FDADIController {
 		final HttpSession session = req.getSession();
 		final String loggedInUsername = (String) session.getAttribute("username");
 		if (StringUtils.isBlank(loggedInUsername)) {
-			return "redirect:/login";
+			return "redirect:login";
 		}
 
 		final List<PharmClass> all = pharmService.findAll();
