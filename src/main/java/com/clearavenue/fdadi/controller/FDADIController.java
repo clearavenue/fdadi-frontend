@@ -63,7 +63,7 @@ public class FDADIController {
 	public final String login(final HttpSession session, final ModelMap model) {
 		log.debug("start /login");
 		log.debug("calling delete all");
-		userService.deleteAll();
+		// userService.deleteAll();
 		log.debug("saving user");
 		userService.save(UserProfile.builder().userId("DemoUser").password("DemoPassword1").build());
 		log.debug("setting attribute");
