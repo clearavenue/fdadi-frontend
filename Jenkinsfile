@@ -1,4 +1,4 @@
-@Library('clearavenue/clearavenue-jenkins-sharedlib')_
+@Library('clearavenue/clearavenue-jenkins-sharedlib@jib-plugin')_
 
 mavenDevsecopsPipeline {
   project_name = 'fdadi-frontend'
