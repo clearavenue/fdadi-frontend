@@ -56,7 +56,7 @@ spec:
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: SERVICE_NAME-vs
+  name: NAMESPACE-SERVICE_NAME-vs
 spec:
   hosts:
   - "*"
