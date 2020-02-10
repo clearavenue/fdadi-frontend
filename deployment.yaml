@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: SERVICE_NAME
-          image: IMAGE_NAME:latest
+          image: DOCKER_USER/SERVICE_NAME:latest
           imagePullPolicy: Always
           livenessProbe:
             initialDelaySeconds: 90
