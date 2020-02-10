@@ -1,0 +1,83 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: SERVICE_NAME
+  namespace: NAMESPACE
+  labels:
+    app: APP_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: APP_NAME
+  template:
+    metadata:
+      labels:
+        app: APP_NAME
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: SERVICE_NAME
+          image: IMAGE_NAME:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            initialDelaySeconds: 90
+            httpGet:
+              path: LIVENESS_URL
+              port: SERVICE_PORT
+          readinessProbe:
+            httpGet:
+              path: READINESS_URL
+              port: SERVICE_PORT
+          ports:
+            - name: SERVICE_NAME
+              containerPort: SERVICE_PORT
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: SERVICE_NAME
+  namespace: NAMESPACE
+spec:
+  ports:
+    - port: SERVICE_PORT
+      targetPort: SERVICE_PORT
+      name: http-SERVICE_NAME
+  selector:
+    app: APP_NAME
+---
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: SERVICE_NAME-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - "main-gateway"
+  http:
+  - match:
+    - uri:
+        prefix: "/NAMESPACE/SERVICE_CONTEXT/"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: SERVICE_NAME.NAMESPACE.svc.cluster.local
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+    websocketUpgrade: true    
+  - route:
+    - destination:
+        host: SERVICE_NAME.NAMESPACE.svc.cluster.local
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 5s
+---
