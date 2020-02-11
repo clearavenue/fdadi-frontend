@@ -92,7 +92,7 @@ spec:
   http:
   - match:
     - uri:
-      prefix: "/BRANCH_NAME/"
+        prefix: "/BRANCH_NAME/"
     rewrite:
       uri: "/"
     route:
