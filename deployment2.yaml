@@ -59,6 +59,7 @@ kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
   name: gateway-to-SERVICE_NAME-vs
+  namespace: default
 spec:
   hosts:
   - "*"
@@ -84,6 +85,7 @@ kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
   name: SERVICE_NAME-to-subset-vs
+  namespace: default
 spec:
   hosts:
   - SERVICE_NAME.APP_NAME.svc.cluster.local
