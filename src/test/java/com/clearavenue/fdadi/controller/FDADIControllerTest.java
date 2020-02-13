@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,9 +46,12 @@ public class FDADIControllerTest {
 	@MockBean
 	BuildProperties buildProperties;
 
+	@MockBean
+	GitProperties gitProperties;
+
 	@Test
 	public void getHome() throws Exception {
-		this.mockMvc.perform(get("/app")).andExpect(status().isOk()).andExpect(view().name("index"));
+		this.mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
 		assertTrue(true, "should always be true");
 	}
 
