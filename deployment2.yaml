@@ -47,7 +47,7 @@ spec:
               path: READINESS_URL
               port: SERVICE_PORT
           ports:
-            - name: http-SERVICE_NAME
+            - name: http
               containerPort: SERVICE_PORT
 ---
 kind: Service
