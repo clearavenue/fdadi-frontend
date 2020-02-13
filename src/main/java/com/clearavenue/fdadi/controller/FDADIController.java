@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,8 @@ public class FDADIController {
 
 	private final PharmClassService pharmService;
 
+	private final BuildProperties buildProperties;
+
 	/**
 	 * Index.
 	 *
@@ -55,6 +58,7 @@ public class FDADIController {
 	@GetMapping("/app")
 	public final String index(final HttpSession session, final ModelMap model) {
 		log.debug("/app - showing index");
+		model.addAttribute("version", buildProperties.getVersion());
 		return "index";
 	}
 

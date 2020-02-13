@@ -6,7 +6,7 @@
 <body>
 	<div class="container" layout:fragment="content">
 		<div class="jumbotron">
-			<h1 class="display-4">FDADI - test-pipeline</h1>
+			<h1 class="display-4">FDADI - version: ${version}</h1>
 		</div>
 				
 		<div th:if="${errorMessage}" class="mb-3 alert alert-danger" th:text="${errorMessage}"></div>
