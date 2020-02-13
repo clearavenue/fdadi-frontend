@@ -28,7 +28,7 @@ spec:
     metadata:
       labels:
         app: APP_NAME
-        version: test-BRANCH_NAME
+        version: SERVICE_NAME-BRANCH_NAME
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
