@@ -1,4 +1,4 @@
-@Library('clearavenue/clearavenue-jenkins-sharedlib@update_kubectl_image')_
+@Library('clearavenue/clearavenue-jenkins-sharedlib@test-pipeline')_
 
 devPipeline {
   app_name = 'fdadi'
