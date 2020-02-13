@@ -94,6 +94,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: SERVICE_NAME-BRANCH_NAME
+  namespace: default
 spec:
   host: SERVICE_NAME.APP_NAME.svc.cluster.local
   subsets:
