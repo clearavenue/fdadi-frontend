@@ -77,7 +77,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/SERVICE_NAME/BRANCH_NAME/"
+        prefix: "/APP_NAME/BRANCH_NAME/"
     rewrite:
       uri: "/"
     route:
