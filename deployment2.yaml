@@ -77,11 +77,11 @@ spec:
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
-              path: /APP_NAME/BRANCH_NAME/LIVENESS_URL
+              path: LIVENESS_URL
               port: SERVICE_PORT
           readinessProbe:
             httpGet:
-              path: /APP_NAME/BRANCH_NAME/READINESS_URL
+              path: READINESS_URL
               port: SERVICE_PORT
           ports:
             - name: http
