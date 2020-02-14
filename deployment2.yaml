@@ -71,6 +71,9 @@ spec:
         - name: SERVICE_NAME-BRANCH_NAME
           image: DOCKER_USER/SERVICE_NAME:latest
           imagePullPolicy: Always
+          env:
+          - name: SERVER_SERVLET_CONTEXT_PATH
+            value: "/APP_NAME/BRANCH_NAME/"
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
