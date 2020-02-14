@@ -114,8 +114,8 @@ spec:
   - match:
     - uri:
         prefix: "/APP_NAME/BRANCH_NAME/"
-    #rewrite:
-    #  uri: "/"
+    rewrite:
+      uri: "/"
     route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
