@@ -96,7 +96,6 @@ spec:
   ports:
     - port: SERVICE_PORT
       targetPort: SERVICE_PORT
-      name: http
   selector:
     app: APP_NAME
 ---
