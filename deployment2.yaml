@@ -72,16 +72,16 @@ spec:
           image: DOCKER_USER/SERVICE_NAME:latest
           imagePullPolicy: Always
           env:
-          #- name: SERVER_SERVLET_CONTEXT_PATH
-          #  value: "/APP_NAME/BRANCH_NAME/"
+          - name: SERVER_SERVLET_CONTEXT_PATH
+            value: "/APP_NAME/BRANCH_NAME/"
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
-              path: LIVENESS_URL
+              path: /APP_NAME/BRANCH_NAME/LIVENESS_URL
               port: SERVICE_PORT
           readinessProbe:
             httpGet:
-              path: READINESS_URL
+              path: /APP_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
             - name: http
