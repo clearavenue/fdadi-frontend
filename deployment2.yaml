@@ -117,13 +117,14 @@ spec:
     #  uri: "/"
     route:
     - destination:
-        host: SERVICE_NAME.APP_NAME
+        host: SERVICE_NAME.APP_NAME.svc.cluster.local
         subset: BRANCH_NAME
         port:
           number: SERVICE_PORT
     retries:
       attempts: 5
       perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -132,7 +133,7 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: default
 spec:
-  host: SERVICE_NAME.APP_NAME
+  host: SERVICE_NAME.APP_NAME.svc.cluster.local
   subsets:
   - name: BRANCH_NAME
     labels:
