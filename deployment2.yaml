@@ -117,7 +117,7 @@ spec:
     #  uri: "/"
     route:
     - destination:
-        host: SERVICE_NAME.APP_NAME.svc.cluster.local
+        host: SERVICE_NAME.APP_NAME
         subset: BRANCH_NAME
         port:
           number: SERVICE_PORT
@@ -132,7 +132,7 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: default
 spec:
-  host: SERVICE_NAME.APP_NAME.svc.cluster.local
+  host: SERVICE_NAME.APP_NAME
   subsets:
   - name: BRANCH_NAME
     labels:
