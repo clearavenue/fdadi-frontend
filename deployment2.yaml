@@ -125,7 +125,7 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: trueistio 
+    websocketUpgrade: true 
   - route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
@@ -136,7 +136,7 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: trueistio
+    websocketUpgrade: true
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
