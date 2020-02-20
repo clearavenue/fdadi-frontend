@@ -102,7 +102,7 @@ spec:
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: gateway-to-SERVICE_NAME-vs
+  name: gateway-to-SERVICE_NAME-BRANCH_NAME-vs
   namespace: default
 spec:
   hosts:
