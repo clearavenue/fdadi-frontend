@@ -1,6 +1,6 @@
 @Library('clearavenue/clearavenue-jenkins-sharedlib')_
 
-devPipeline {
+mavenDevsecopsPipeline {
   app_name = 'fdadi'
   docker_user = 'clearavenuedocker'
   service_name = 'fdadi-frontend'
