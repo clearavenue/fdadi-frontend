@@ -51,17 +51,19 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: APP_NAME
   labels:
-    app: APP_NAME
+    ns: APP_NAME
+    app: SERVICE_NAME
     version: BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: APP_NAME
+      ns: APP_NAME
   template:
     metadata:
       labels:
-        app: APP_NAME
+        ns: APP_NAME
+        app: SERVICE_NAME
         version: BRANCH_NAME
       annotations:
         sidecar.istio.io/inject: "true"
@@ -97,12 +99,12 @@ spec:
     - port: SERVICE_PORT
       targetPort: SERVICE_PORT
   selector:
-    app: APP_NAME
+    ns: APP_NAME
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: gateway-to-SERVICE_NAME-BRANCH_NAME-vs
+  name: SERVICE_NAME-BRANCH_NAME-vs
   namespace: default
 spec:
   hosts:
