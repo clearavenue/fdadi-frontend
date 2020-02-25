@@ -12,6 +12,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,10 @@ public class FDADIController {
 
 	private final PharmClassService pharmService;
 
+	private final BuildProperties buildProperties;
+
+	private final GitProperties gitProperties;
+
 	/**
 	 * Index.
 	 *
@@ -52,9 +58,11 @@ public class FDADIController {
 	 * @param model the map
 	 * @return the string
 	 */
-	@GetMapping("/app")
+	@GetMapping("/")
 	public final String index(final HttpSession session, final ModelMap model) {
-		log.debug("/app - showing index");
+		log.debug("/ - showing index");
+		final String version = String.format("%s - %s", buildProperties.getVersion(), gitProperties.getBranch());
+		model.addAttribute("version", version);
 		return "index";
 	}
 
@@ -77,8 +85,8 @@ public class FDADIController {
 		log.debug("start /logout");
 		log.debug("remove username attrib");
 		session.removeAttribute("username");
-		log.debug("end /logout - redirect /app");
-		return "redirect:app";
+		log.debug("end /logout - redirect /");
+		return "redirect:/";
 	}
 
 	@GetMapping("/homepage")

@@ -1,7 +1,10 @@
 @Library('clearavenue/clearavenue-jenkins-sharedlib')_
 
 mavenDevsecopsPipeline {
-  project_name = 'fdadi-frontend'
+  app_name = 'fdadi'
   docker_user = 'clearavenuedocker'
-  deployment_yaml = 'fdadi-frontend-deployment.yaml'
+  service_name = 'fdadi-frontend'
+  service_port = 8081
+  liveness_url = '/actuator/health'
+  readiness_url = '/actuator/health'
 }
