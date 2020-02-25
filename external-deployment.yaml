@@ -51,17 +51,19 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: APP_NAME
   labels:
-    app: APP_NAME
+    ns: APP_NAME
+    app: SERVICE_NAME
     version: BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: APP_NAME
+      ns: APP_NAME
   template:
     metadata:
       labels:
-        app: APP_NAME
+        ns: APP_NAME
+        app: SERVICE_NAME
         version: BRANCH_NAME
       annotations:
         sidecar.istio.io/inject: "true"
@@ -73,15 +75,15 @@ spec:
           imagePullPolicy: Always
           env:
           - name: SERVER_SERVLET_CONTEXT_PATH
-            value: "/APP_NAME/BRANCH_NAME/"
+            value: "/SERVICE_NAME/BRANCH_NAME/"
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
-              path: /APP_NAME/BRANCH_NAME/LIVENESS_URL
+              path: /SERVICE_NAME/BRANCH_NAME/LIVENESS_URL
               port: SERVICE_PORT
           readinessProbe:
             httpGet:
-              path: /APP_NAME/BRANCH_NAME/READINESS_URL
+              path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
             - name: http
@@ -97,12 +99,12 @@ spec:
     - port: SERVICE_PORT
       targetPort: SERVICE_PORT
   selector:
-    app: APP_NAME
+    ns: APP_NAME
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: gateway-to-SERVICE_NAME-BRANCH_NAME-vs
+  name: SERVICE_NAME-BRANCH_NAME-vs
   namespace: default
 spec:
   hosts:
@@ -112,7 +114,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: "/APP_NAME/BRANCH_NAME/"
+        prefix: "/SERVICE_NAME/BRANCH_NAME/"
     route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
@@ -140,7 +142,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: SERVICE_NAME-BRANCH_NAME
-  namespace: default
+  namespace: APP_NAME
 spec:
   host: SERVICE_NAME.APP_NAME.svc.cluster.local
   subsets:
