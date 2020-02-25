@@ -1,4 +1,4 @@
-@Library('clearavenue/clearavenue-jenkins-sharedlib')_
+@Library('clearavenue/clearavenue-jenkins-sharedlib@externalinternal')_
 
 mavenDevsecopsPipeline {
   app_name = 'fdadi'
@@ -7,4 +7,5 @@ mavenDevsecopsPipeline {
   service_port = 8081
   liveness_url = '/actuator/health'
   readiness_url = '/actuator/health'
+  deploymentFile = 'internal-deployment.yaml'
 }
