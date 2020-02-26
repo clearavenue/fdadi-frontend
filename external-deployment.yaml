@@ -102,6 +102,10 @@ spec:
   ports:
     - port: SERVICE_PORT
       targetPort: SERVICE_PORT
+    - port: 8082
+      targetPort: 8082
+    - port: 8083
+      targetPort: 8083
   selector:
     ns: APP_NAME
 ---
