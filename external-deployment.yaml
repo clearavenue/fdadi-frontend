@@ -103,10 +103,8 @@ spec:
       targetPort: SERVICE_PORT
     - name: http-user
       port: 8082
-      targetPort: 8082
     - name: http-med
       port: 8083
-      targetPort: 8083
   selector:
     app: SERVICE_NAME
 ---
