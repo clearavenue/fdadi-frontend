@@ -51,18 +51,16 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: APP_NAME
   labels:
-    ns: APP_NAME
     app: SERVICE_NAME
     version: BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      ns: APP_NAME
+      app: SERVICE_NAME
   template:
     metadata:
       labels:
-        ns: APP_NAME
         app: SERVICE_NAME
         version: BRANCH_NAME
       annotations:
@@ -86,11 +84,11 @@ spec:
               path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
-            - name: http
+            - name: http-front
               containerPort: SERVICE_PORT
-            - name: http
+            - name: http-user
               containerPort: 8082
-            - name: http
+            - name: http-med
               containerPort: 8083
 ---
 kind: Service
@@ -100,17 +98,55 @@ metadata:
   namespace: APP_NAME
 spec:
   ports:
-    - name: http
+    - name: http-front
       port: SERVICE_PORT
       targetPort: SERVICE_PORT
-    - name: http
+    - name: http-user
       port: 8082
       targetPort: 8082
-    - name: http
+    - name: http-med
       port: 8083
       targetPort: 8083
   selector:
-    ns: APP_NAME
+    app: SERVICE_NAME
+---
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: SERVICE_NAME-BRANCH_NAME-vs
+  namespace: default
+spec:
+  hosts:
+  - SERVICE_NAME.APP_NAME
+  gateways:
+  - "main-gateway"
+  http:
+  - match:
+    - port: 8082
+    route:
+    - destination:
+        host: fdadi-user-service.APP_NAME.svc.cluster.local
+        #subset: BRANCH_NAME
+        port:
+          number: 8082
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true 
+  - match:
+    - port: 8083
+    route:
+    - destination:
+        host: fdadi-medication-service.APP_NAME.svc.cluster.local
+        #subset: BRANCH_NAME
+        port:
+          number: 8083
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true 
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
