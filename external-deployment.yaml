@@ -113,7 +113,7 @@ spec:
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: SERVICE_NAME-BRANCH_NAME-vs
+  name: SERVICE_NAME-BRANCH_NAME-internal
   namespace: default
 spec:
   hosts:
@@ -151,7 +151,7 @@ spec:
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: SERVICE_NAME-BRANCH_NAME-vs
+  name: SERVICE_NAME-BRANCH_NAME-external
   namespace: default
 spec:
   hosts:
