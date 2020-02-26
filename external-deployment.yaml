@@ -86,10 +86,6 @@ spec:
           ports:
             - name: http-front
               containerPort: SERVICE_PORT
-            - name: http-user
-              containerPort: 8082
-            - name: http-med
-              containerPort: 8083
 ---
 kind: Service
 apiVersion: v1
@@ -101,10 +97,6 @@ spec:
     - name: http-front
       port: SERVICE_PORT
       targetPort: SERVICE_PORT
-    - name: http-user
-      port: 8082
-    - name: http-med
-      port: 8083
   selector:
     app: SERVICE_NAME
 ---
