@@ -86,11 +86,11 @@ spec:
               path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
-            - name: http-front
+            - name: http
               containerPort: SERVICE_PORT
-            - name: http-users
+            - name: http
               containerPort: 8082
-            - name: http-med
+            - name: http
               containerPort: 8083
 ---
 kind: Service
@@ -100,13 +100,13 @@ metadata:
   namespace: APP_NAME
 spec:
   ports:
-    - name: http-front
+    - name: http
       port: SERVICE_PORT
       targetPort: SERVICE_PORT
-    - name: http-users
+    - name: http
       port: 8082
       targetPort: 8082
-    - name: http-med
+    - name: http
       port: 8083
       targetPort: 8083
   selector:
