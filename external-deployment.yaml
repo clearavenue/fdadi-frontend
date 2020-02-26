@@ -144,7 +144,35 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true
+  tcp:
+  - match:
+    - port: 8082
+    route:
+    - destination:
+        host: fdadi-user-service.APP_NAME.svc.cluster.local
+        #subset: BRANCH_NAME
+        port:
+          number: 8082
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true 
+  - match:
+    - port: 8083
+    route:
+    - destination:
+        host: fdadi-medication-service.APP_NAME.svc.cluster.local
+        #subset: BRANCH_NAME
+        port:
+          number: 8083
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true
+
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
