@@ -86,6 +86,10 @@ spec:
           ports:
             - name: http-front
               containerPort: SERVICE_PORT
+            - name: http-user
+              containerPort: 8082
+            - name: http-med
+              containerPort: 8083
 ---
 kind: Service
 apiVersion: v1
