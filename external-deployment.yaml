@@ -115,7 +115,7 @@ metadata:
 spec:
   hosts:
   - "*"
-  - SERVICE_NAME.APP_NAME.svc.cluster.local
+  #- SERVICE_NAME.APP_NAME.svc.cluster.local
   gateways:
   - "main-gateway"
   http:
