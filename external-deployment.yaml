@@ -104,86 +104,10 @@ spec:
       port: 8082
     - name: http-med
       port: 8083
+    - name: mysql-db
+      port: 3306
   selector:
     app: SERVICE_NAME
----
-kind: VirtualService
-apiVersion: networking.istio.io/v1alpha3
-metadata:
-  name: SERVICE_NAME-BRANCH_NAME-internal
-  namespace: default
-spec:
-  hosts:
-  - SERVICE_NAME.APP_NAME.svc.cluster.local
-  gateways:
-  - "main-gateway"
-  http:
-  - match:
-    - uri:
-        prefix: "/user/" 
-      rewrite:
-        uri: "/"
-    route:
-    - destination:
-        host: fdadi-user-service.APP_NAME.svc.cluster.local
-        #subset: BRANCH_NAME
-        port:
-          number: 8082
-    retries:
-      attempts: 50
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true 
-  - match:
-    - uri:
-        prefix: "/medication/" 
-      rewrite:
-        uri: "/"
-    route:
-    - destination:
-        host: fdadi-medication-service.APP_NAME.svc.cluster.local
-        #subset: BRANCH_NAME
-        port:
-          number: 8083
-    retries:
-      attempts: 50
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true
-  tcp:
-  - match:
-    - uri:
-        prefix: "/user/" 
-      rewrite:
-        uri: "/"
-    route:
-    - destination:
-        host: fdadi-user-service.APP_NAME.svc.cluster.local
-        #subset: BRANCH_NAME
-        port:
-          number: 8082
-    retries:
-      attempts: 50
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true 
-  - match:
-    - uri:
-        prefix: "/medication/" 
-      rewrite:
-        uri: "/"
-    route:
-    - destination:
-        host: fdadi-medication-service.APP_NAME.svc.cluster.local
-        #subset: BRANCH_NAME
-        port:
-          number: 8083
-    retries:
-      attempts: 50
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true
-
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
