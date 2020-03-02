@@ -100,7 +100,10 @@ spec:
   ports:
     - name: http-front
       port: SERVICE_PORT
-      targetPort: SERVICE_PORT
+    - name: http-user
+      port: 8082
+    - name: http-med
+      port: 8083
   selector:
     app: SERVICE_NAME
 ---
