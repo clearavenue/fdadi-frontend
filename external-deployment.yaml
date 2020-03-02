@@ -114,13 +114,15 @@ metadata:
   namespace: default
 spec:
   hosts:
-  - "*"
-  #- SERVICE_NAME.APP_NAME.svc.cluster.local
+  - SERVICE_NAME.APP_NAME.svc.cluster.local
   gateways:
   - "main-gateway"
   http:
   - match:
-    - port: 8082
+    - uri:
+        prefix: "/user/" 
+      rewrite:
+        uri: "/"
     route:
     - destination:
         host: fdadi-user-service.APP_NAME.svc.cluster.local
@@ -133,7 +135,10 @@ spec:
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true 
   - match:
-    - port: 8083
+    - uri:
+        prefix: "/medication/" 
+      rewrite:
+        uri: "/"
     route:
     - destination:
         host: fdadi-medication-service.APP_NAME.svc.cluster.local
@@ -147,7 +152,10 @@ spec:
     websocketUpgrade: true
   tcp:
   - match:
-    - port: 8082
+    - uri:
+        prefix: "/user/" 
+      rewrite:
+        uri: "/"
     route:
     - destination:
         host: fdadi-user-service.APP_NAME.svc.cluster.local
@@ -160,7 +168,10 @@ spec:
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true 
   - match:
-    - port: 8083
+    - uri:
+        prefix: "/medication/" 
+      rewrite:
+        uri: "/"
     route:
     - destination:
         host: fdadi-medication-service.APP_NAME.svc.cluster.local
