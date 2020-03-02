@@ -114,6 +114,7 @@ metadata:
   namespace: default
 spec:
   hosts:
+  - "*"
   - SERVICE_NAME.APP_NAME.svc.cluster.local
   gateways:
   - "main-gateway"
