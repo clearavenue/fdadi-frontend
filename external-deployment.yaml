@@ -127,7 +127,7 @@ spec:
         port:
           number: 8082
     retries:
-      attempts: 5
+      attempts: 50
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true 
@@ -140,7 +140,7 @@ spec:
         port:
           number: 8083
     retries:
-      attempts: 5
+      attempts: 50
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true
@@ -154,7 +154,7 @@ spec:
         port:
           number: 8082
     retries:
-      attempts: 5
+      attempts: 50
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true 
@@ -167,7 +167,7 @@ spec:
         port:
           number: 8083
     retries:
-      attempts: 5
+      attempts: 50
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true
