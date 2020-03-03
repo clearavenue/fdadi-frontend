@@ -90,6 +90,8 @@ spec:
               containerPort: 8082
             - name: http-med
               containerPort: 8083
+            - name: mysql
+              containerPort: 3306
 ---
 kind: Service
 apiVersion: v1
