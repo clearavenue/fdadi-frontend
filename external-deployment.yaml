@@ -112,7 +112,7 @@ spec:
   hosts:
   - "*"
   gateways:
-  - "ingressgateway"
+  - "ingressgateway.istio-system"
   http:
   - match:
     - uri:
