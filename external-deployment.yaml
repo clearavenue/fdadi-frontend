@@ -139,6 +139,32 @@ spec:
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
     websocketUpgrade: true
+  https:
+  - match:
+    - uri:
+        prefix: "/SERVICE_NAME/BRANCH_NAME/"
+    route:
+    - destination:
+        host: SERVICE_NAME.APP_NAME.svc.cluster.local
+        subset: BRANCH_NAME
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true 
+  - route:
+    - destination:
+        host: SERVICE_NAME.APP_NAME.svc.cluster.local
+        subset: master
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset
+    websocketUpgrade: true
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
