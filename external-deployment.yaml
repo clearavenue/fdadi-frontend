@@ -84,11 +84,11 @@ spec:
               path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
-            - name: https-front
+            - name: http-front
               containerPort: SERVICE_PORT
-            - name: https-user
+            - name: http-user
               containerPort: 8082
-            - name: https-med
+            - name: http-med
               containerPort: 8083
             - name: mysql
               containerPort: 3306
@@ -100,7 +100,7 @@ metadata:
   namespace: APP_NAME
 spec:
   ports:
-    - name: https-front
+    - name: http-front
       port: SERVICE_PORT
   selector:
     app: SERVICE_NAME
