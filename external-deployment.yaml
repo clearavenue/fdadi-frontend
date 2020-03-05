@@ -63,8 +63,6 @@ spec:
       labels:
         app: SERVICE_NAME
         version: BRANCH_NAME
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       serviceAccountName: SERVICE_NAME
       containers:
