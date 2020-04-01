@@ -75,11 +75,11 @@ spec:
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
-              path: /SERVICE_NAME/BRANCH_NAME/LIVENESS_URL
+              path: SERVICE_NAME.APP_NAME/SERVICE_NAME/BRANCH_NAME/LIVENESS_URL
               port: SERVICE_PORT
           readinessProbe:
             httpGet:
-              path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
+              path: SERVICE_NAME.APP_NAME/SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
             - name: http-front
@@ -106,12 +106,12 @@ spec:
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: SERVICE_NAME-BRANCH_NAME-external
+  name: SERVICE_NAME-BRANCH_NAME
   namespace: default
 spec:
   hosts:
-  - "a4e3ea63a121f456da14c33ff46bef47-463702987.us-east-1.elb.amazonaws.com"
-  - "devsecops.clearavenue.com"
+  - HOST_NAME
+  - SERVICE_NAME.APP_NAME
   gateways:
   - "ingressgateway.istio-system"
   http:
@@ -127,8 +127,7 @@ spec:
     retries:
       attempts: 5
       perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true 
+      retryOn: connect-failure,internal,500,503,5xx,reset 
   - route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
@@ -139,7 +138,6 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true
   https:
   - match:
     - uri:
@@ -153,8 +151,7 @@ spec:
     retries:
       attempts: 5
       perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true 
+      retryOn: connect-failure,internal,500,503,5xx,reset,404
   - route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
@@ -164,8 +161,7 @@ spec:
     retries:
       attempts: 5
       perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true
+      retryOn: connect-failure,internal,500,503,5xx,reset,404
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
