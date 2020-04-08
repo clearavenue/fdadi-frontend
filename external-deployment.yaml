@@ -1,10 +1,10 @@
 ---
 kind: Namespace
-apiVersion: v1
+apiVersion: apps/v1
 metadata:
   name: APP_NAME
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: ServiceAccount
 metadata:
   name: SERVICE_NAME
@@ -92,7 +92,7 @@ spec:
               containerPort: 3306
 ---
 kind: Service
-apiVersion: v1
+apiVersion: apps/v1
 metadata:
   name: SERVICE_NAME
   namespace: APP_NAME
