@@ -64,7 +64,6 @@ spec:
         app: SERVICE_NAME
         version: BRANCH_NAME
     spec:
-      revisionHistoryLimit: 1
       serviceAccountName: SERVICE_NAME
       containers:
         - name: SERVICE_NAME-BRANCH_NAME
