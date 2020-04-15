@@ -1,10 +1,10 @@
 ---
 kind: Namespace
-apiVersion: v1
+apiVersion: apps/v1
 metadata:
   name: APP_NAME
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: ServiceAccount
 metadata:
   name: SERVICE_NAME
@@ -51,22 +51,18 @@ metadata:
   name: SERVICE_NAME-BRANCH_NAME
   namespace: APP_NAME
   labels:
-    ns: APP_NAME
     app: SERVICE_NAME
     version: BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      ns: APP_NAME
+      app: SERVICE_NAME
   template:
     metadata:
       labels:
-        ns: APP_NAME
         app: SERVICE_NAME
         version: BRANCH_NAME
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       serviceAccountName: SERVICE_NAME
       containers:
@@ -79,38 +75,45 @@ spec:
           livenessProbe:
             initialDelaySeconds: 90
             httpGet:
-              path: /SERVICE_NAME/BRANCH_NAME/LIVENESS_URL
+              path: SERVICE_NAME.APP_NAME/SERVICE_NAME/BRANCH_NAME/LIVENESS_URL
               port: SERVICE_PORT
           readinessProbe:
             httpGet:
-              path: /SERVICE_NAME/BRANCH_NAME/READINESS_URL
+              path: SERVICE_NAME.APP_NAME/SERVICE_NAME/BRANCH_NAME/READINESS_URL
               port: SERVICE_PORT
           ports:
-            - name: http
+            - name: http-front
               containerPort: SERVICE_PORT
+            - name: http-user
+              containerPort: 8082
+            - name: http-med
+              containerPort: 8083
+            - name: mysql
+              containerPort: 3306
 ---
 kind: Service
-apiVersion: v1
+apiVersion: apps/v1
 metadata:
   name: SERVICE_NAME
   namespace: APP_NAME
 spec:
   ports:
-    - port: SERVICE_PORT
-      targetPort: SERVICE_PORT
+    - name: http-front
+      port: SERVICE_PORT
   selector:
-    ns: APP_NAME
+    app: SERVICE_NAME
 ---
 kind: VirtualService
 apiVersion: networking.istio.io/v1alpha3
 metadata:
-  name: SERVICE_NAME-BRANCH_NAME-vs
+  name: SERVICE_NAME-BRANCH_NAME
   namespace: default
 spec:
   hosts:
-  - "aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com"
+  - HOST_NAME
+  - SERVICE_NAME.APP_NAME
   gateways:
-  - "main-gateway"
+  - "ingressgateway.istio-system"
   http:
   - match:
     - uri:
@@ -124,8 +127,7 @@ spec:
     retries:
       attempts: 5
       perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true 
+      retryOn: connect-failure,internal,500,503,5xx,reset 
   - route:
     - destination:
         host: SERVICE_NAME.APP_NAME.svc.cluster.local
@@ -136,7 +138,30 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
-    websocketUpgrade: true
+  https:
+  - match:
+    - uri:
+        prefix: "/SERVICE_NAME/BRANCH_NAME/"
+    route:
+    - destination:
+        host: SERVICE_NAME.APP_NAME.svc.cluster.local
+        subset: BRANCH_NAME
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset,404
+  - route:
+    - destination:
+        host: SERVICE_NAME.APP_NAME.svc.cluster.local
+        subset: master
+        port:
+          number: SERVICE_PORT
+    retries:
+      attempts: 5
+      perTryTimeout: 2s
+      retryOn: connect-failure,internal,500,503,5xx,reset,404
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
