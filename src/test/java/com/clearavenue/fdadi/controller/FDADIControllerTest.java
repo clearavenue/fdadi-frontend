@@ -1,24 +1,5 @@
 package com.clearavenue.fdadi.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.info.GitProperties;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.clearavenue.fdadi.model.LabelOpenfda;
 import com.clearavenue.fdadi.model.LabelResult;
 import com.clearavenue.fdadi.model.LabelResults;
@@ -26,9 +7,25 @@ import com.clearavenue.fdadi.model.UserProfile;
 import com.clearavenue.fdadi.service.MedicationService;
 import com.clearavenue.fdadi.service.PharmClassService;
 import com.clearavenue.fdadi.service.UserProfileService;
+import com.clearavenue.fdadi.service.VersionService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(FDADIController.class)
-@ActiveProfiles("test")
 public class FDADIControllerTest {
 
 	@Autowired
@@ -44,10 +41,10 @@ public class FDADIControllerTest {
 	private PharmClassService pharmService;
 
 	@MockBean
-	BuildProperties buildProperties;
+	VersionService versionService;
 
 	@MockBean
-	GitProperties gitProperties;
+	BuildProperties buildProperties;
 
 	@Test
 	public void getHome() throws Exception {

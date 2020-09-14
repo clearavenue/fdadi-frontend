@@ -3,13 +3,9 @@
  */
 package com.clearavenue.fdadi.model;
 
-import java.util.Locale;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import java.util.Locale;
 
 /**
  * The Class AllMedications.

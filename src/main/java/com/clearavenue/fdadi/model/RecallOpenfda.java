@@ -1,15 +1,14 @@
 package com.clearavenue.fdadi.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "product_ndc", "nui", "package_ndc", "generic_name", "spl_set_id", "pharm_class_cs", "brand_name", "original_packager_product_ndc", "manufacturer_name",
