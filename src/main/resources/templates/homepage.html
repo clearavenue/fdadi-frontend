@@ -10,19 +10,17 @@
 				<h2>Medication information and drug interactions for [[${session.username}]]</h2>
 			</div>
 		</div>
-		
+
 		<div th:if="${errorMessage}" class="mb-3 alert alert-danger" th:text="${errorMessage}"></div>
 
 		<div class="row mb-3 text-center">
 			<div class="col">
-				<!-- <div class="btn-group"> -->
 				<button type="button" id="addMedByNameButton" class="btn btn-primary" th:onclick="|javascript:window.location.href='@{/addMedByName}'; return false;|">Add Medication
 					by Name</button>
 				<button type="button" id="addMedByPClassButton" class="btn btn-primary" th:onclick="|javascript:window.location.href='@{/addMedByPharmClass}'; return false;|">Add
 					Medication by PharmClass</button>
-				<button type="button" id="interactionDetails" class="btn btn-primary">Check for Drug Interactions</button>
-				<button type="button" id="recalls" class="btn btn-primary">Recalls</button>
-				<!-- </div>  -->
+				<button disabled type="button" id="interactionDetails" class="btn btn-primary">Check for Drug Interactions</button>
+				<button disabled type="button" id="recalls" class="btn btn-primary">Recalls</button>
 			</div>
 		</div>
 
@@ -53,7 +51,7 @@
 											th:onclick="javascript:window.location.href=this.getAttribute('data-url')+this.getAttribute('data-medicationName');">
 											<span class="fas fa-info-circle" aria-hidden="true"></span>
 										</button>
-										<button class="btn btn-info btn-xs" data-toggle="tooltip" data-container="body" data-placement="top" title="Adverse Reactions">
+										<button class="btn btn-info btn-xs" disabled data-toggle="tooltip" data-container="body" data-placement="top" title="Adverse Reactions">
 											<span class="fas fa-stop-circle" aria-hidden="true"></span>
 										</button>
 									</div>
