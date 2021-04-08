@@ -3,17 +3,16 @@
  */
 package com.clearavenue.fdadi.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.info.GitProperties;
+import com.clearavenue.fdadi.model.Medication;
+import com.clearavenue.fdadi.model.SelectedValues;
+import com.clearavenue.fdadi.model.UserProfile;
+import com.clearavenue.fdadi.service.MedicationService;
+import com.clearavenue.fdadi.service.PharmClassService;
+import com.clearavenue.fdadi.service.UserProfileService;
+import com.clearavenue.fdadi.service.VersionService;
+import io.micrometer.core.instrument.util.StringUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +20,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.clearavenue.fdadi.model.Medication;
-import com.clearavenue.fdadi.model.PharmClass;
-import com.clearavenue.fdadi.model.SelectedValues;
-import com.clearavenue.fdadi.model.UserProfile;
-import com.clearavenue.fdadi.service.MedicationService;
-import com.clearavenue.fdadi.service.PharmClassService;
-import com.clearavenue.fdadi.service.UserProfileService;
-
-import io.micrometer.core.instrument.util.StringUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The Class FDADIController.
@@ -47,111 +40,81 @@ public class FDADIController {
 
 	private final PharmClassService pharmService;
 
-	private final BuildProperties buildProperties;
-
-	private final GitProperties gitProperties;
+	private final VersionService versionService;
 
 	/**
 	 * Index.
 	 *
-	 * @param req   the req
+	 *
+	 * @param session
 	 * @param model the map
 	 * @return the string
 	 */
 	@GetMapping("/")
-	public final String index(final HttpSession session, final ModelMap model) {
-		log.debug("/ - showing index");
-		final String version = String.format("%s - %s", buildProperties.getVersion(), gitProperties.getBranch());
-		model.addAttribute("version", version);
+	public final String index(HttpSession session, final ModelMap model) {
+		model.addAttribute("version", versionService.version());
 		return "index";
 	}
 
 	// simulate login
 	@GetMapping("/login")
-	public final String login(final HttpSession session, final ModelMap model) {
-		log.debug("start /login");
-		log.debug("calling delete all");
+	public final String login(final HttpSession session) {
 		userService.deleteAll();
-		log.debug("saving user");
 		userService.save(UserProfile.builder().userId("DemoUser").password("DemoPassword1").build());
-		log.debug("setting attribute");
 		session.setAttribute("username", "DemoUser");
-		log.debug("end /login - redirect /homepage");
 		return "redirect:homepage";
 	}
 
 	@GetMapping("/logout")
-	public final String logout(final HttpSession session, final ModelMap model) {
-		log.debug("start /logout");
-		log.debug("remove username attrib");
+	public final String logout(final HttpSession session) {
 		session.removeAttribute("username");
-		log.debug("end /logout - redirect /");
 		return "redirect:/";
 	}
 
 	@GetMapping("/homepage")
 	public final String homepage(final HttpSession session, final ModelMap model) {
-		log.debug("start /homepage");
-
-		log.debug("get username from session");
 		// check if logged in and if not redirect to login
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
-			log.debug("username not found in session, display index");
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return "index";
 		}
 
-		log.debug("calling user service to findbyuserId");
-		final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
-		final UserProfile user = loggedInUser.get();
-		log.debug("/ - {} is logged in", user.getUserId());
 
-		final List<Medication> userMeds = user.getMedications();
+		var user = userService.findByUserId((String) session.getAttribute("username")).get();
+		var userMeds = user.getMedications();
 		Collections.sort(userMeds);
 		model.addAttribute("medList", userMeds);
-		log.debug("/ - medList:{}", userMeds.size());
 
-		final List<String> userMedList = new ArrayList<>();
+		var userMedList = new ArrayList<String>();
 		userMeds.stream().map(med -> med.getMedicationName()).forEach(userMedList::add);
-		log.debug("/ - userMedList:{}", userMedList.size());
-
-		log.debug("end /homepage now display homepage");
 		return "homepage";
 	}
 
 	/**
 	 * Faq.
 	 *
-	 * @param req   the req
-	 * @param model the map
 	 * @return the string
 	 */
 	@GetMapping("/faq")
-	public final String faq(final HttpServletRequest req, final ModelMap model) {
+	public final String faq() {
 		return "faq";
 	}
 
 	/**
 	 * Adds the med by name.
 	 *
-	 * @param req the req
-	 * @param map the map
 	 * @return the string
 	 */
 	@GetMapping("/addMedByName")
 	public final String addMedByName(final HttpSession session, final ModelMap model) {
 		// check if logged in and if not redirect to login
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return "index";
 		}
 
 		model.addAttribute("selected", new SelectedValues());
-
-		final List<Medication> all = medService.findAll();
-		model.addAttribute("allMeds", all);
+		model.addAttribute("allMeds", medService.findAll());
 
 		return "addMedByName";
 	}
@@ -159,25 +122,19 @@ public class FDADIController {
 	/**
 	 * Process add med by name.
 	 *
-	 * @param req the req
-	 * @param map the map
 	 * @return the string
 	 */
 	@PostMapping("/processAddMeds")
 	public final String processAddMedByName(@ModelAttribute("selected") final SelectedValues selected, final HttpSession session, final ModelMap model) {
 		// check if logged in and if not redirect to login
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return "index";
 		}
 
 		if (selected.getSelected().length != 0) {
-			final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
-			final UserProfile user = loggedInUser.get();
-
-			final List<String> medications = Arrays.asList(selected.getSelected());
-			medications.forEach(med -> medService.addUserMedication(user, med));
+			var user = userService.findByUserId((String) session.getAttribute("username")).get();
+			List.of(selected.getSelected()).stream().forEach(med -> medService.addUserMedication(user,med));
 			userService.save(user);
 		}
 
@@ -187,14 +144,12 @@ public class FDADIController {
 	@GetMapping("/removeMedication/{medicationName}")
 	public final String removeMedication(final @PathVariable String medicationName, final HttpSession session, final ModelMap model) {
 		// check if logged in and if not redirect to login
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return index(session, model);
 		}
 
-		final Optional<UserProfile> loggedInUser = userService.findByUserId((String) session.getAttribute("username"));
-		final UserProfile user = loggedInUser.get();
+		var user = userService.findByUserId((String) session.getAttribute("username")).get();
 
 		medService.removeUserMedication(user, medicationName);
 		userService.save(user);
@@ -212,13 +167,11 @@ public class FDADIController {
 	public final String addMedByPharmClass(final HttpServletRequest req, final ModelMap model) {
 		// check if logged in and if not redirect to login
 		final HttpSession session = req.getSession();
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			return "redirect:login";
 		}
 
-		final List<PharmClass> all = pharmService.findAll();
-		model.addAttribute("allPharmClasses", all);
+		model.addAttribute("allPharmClasses", pharmService.findAll());
 		model.addAttribute("selected", new SelectedValues());
 
 		return "addMedByPharmClass";
@@ -227,14 +180,14 @@ public class FDADIController {
 	@PostMapping("/processAddMedByPharmClass")
 	public final String processAddMedByPharmClass(@ModelAttribute("selected") final SelectedValues selected, final HttpSession session, final ModelMap model) {
 		// check if logged in and if not redirect to login
-		final String loggedInUsername = (String) session.getAttribute("username");
-		if (StringUtils.isBlank(loggedInUsername)) {
+		if (StringUtils.isBlank((String) session.getAttribute("username"))) {
 			model.addAttribute("errorMessage", "Please click the [Demo Login] button first");
 			return "index";
 		}
 
-		final List<Medication> medications = new ArrayList<>();
-		final List<String> pharmClassList = Arrays.asList(selected.getSelected());
+		var medications = new ArrayList<Medication>();
+		var pharmClassList = List.of(selected.getSelected());
+
 		pharmClassList.forEach(pharmClass -> pharmService.findByPharmClass(pharmClass).forEach(medications::add));
 
 		model.addAttribute("meds", new SelectedValues());

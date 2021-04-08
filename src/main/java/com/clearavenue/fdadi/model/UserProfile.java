@@ -3,14 +3,10 @@
  */
 package com.clearavenue.fdadi.model;
 
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * The Class UserProfile.
