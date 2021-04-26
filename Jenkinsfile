@@ -1,4 +1,4 @@
-@Library('clearavenue/clearavenue-jenkins-sharedlib@updateServerUrl')_
+@Library('clearavenue/clearavenue-jenkins-sharedlib')_
 
 mavenDevsecopsPipeline {
   app_name = 'fdadi'
