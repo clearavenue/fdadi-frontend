@@ -13,7 +13,7 @@ metadata:
     account: SERVICE_NAME
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: SERVICE_NAME
   namespace: APP_NAME
@@ -32,7 +32,7 @@ rules:
   verbs: ["get"]
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: SERVICE_NAME
@@ -40,7 +40,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: APP_NAME
+  name: SERVICE_NAME
 subjects:
 - kind: ServiceAccount
   name: SERVICE_NAME
@@ -138,30 +138,6 @@ spec:
       attempts: 5
       perTryTimeout: 2s
       retryOn: connect-failure,internal,500,503,5xx,reset
-  https:
-  - match:
-    - uri:
-        prefix: "/SERVICE_NAME/BRANCH_NAME/"
-    route:
-    - destination:
-        host: SERVICE_NAME.APP_NAME.svc.cluster.local
-        subset: BRANCH_NAME
-        port:
-          number: SERVICE_PORT
-    retries:
-      attempts: 5
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset,404
-  - route:
-    - destination:
-        host: SERVICE_NAME.APP_NAME.svc.cluster.local
-        subset: master
-        port:
-          number: SERVICE_PORT
-    retries:
-      attempts: 5
-      perTryTimeout: 2s
-      retryOn: connect-failure,internal,500,503,5xx,reset,404
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
