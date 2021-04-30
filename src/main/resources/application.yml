@@ -7,10 +7,10 @@ server:
 
 user:
   service:
-    url: https://fdadi-user-service.fdadi:8082
+    url: http://fdadi-user-service.fdadi:8082
 medication:
   service:
-    url: https://fdadi-medication-service:8083
+    url: http://fdadi-medication-service:8083
 
 logging:
   level:
