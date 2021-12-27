@@ -4,10 +4,10 @@ spring:
 
 user:
   service:
-    url: https://fdadi-user-service-staging.devsecops.clearavenue.com
+    url: https://fdadi-user-service.devsecops.clearavenue.com
 medication:
   service:
-    url: https://fdadi-medication-service-staging.devsecops.clearavenue.com
+    url: https://fdadi-medication-service.devsecops.clearavenue.com
 
 logging:
   level:
