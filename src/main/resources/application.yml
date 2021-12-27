@@ -2,15 +2,12 @@ spring:
   application:
     name: fdadi
 
-server:
-  port: 8081
-
 user:
   service:
-    url: http://fdadi-user-service.fdadi:8082
+    url: https://fdadi-user-service-staging.devsecops.clearavenue.com
 medication:
   service:
-    url: http://fdadi-medication-service:8083
+    url: https://fdadi-medication-service-staging.devsecops.clearavenue.com
 
 logging:
   level:
@@ -28,15 +25,3 @@ management:
     web:
       exposure:
         include: '*'
-
----
-
-spring:
-  profiles: local
-
-user:
-  service:
-    url: http://localhost:8082
-medication:
-  service:
-    url: http://localhost:8083

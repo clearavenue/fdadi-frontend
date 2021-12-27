@@ -1,5 +1,23 @@
 package com.clearavenue.fdadi.controller;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+
 import com.clearavenue.fdadi.model.LabelOpenfda;
 import com.clearavenue.fdadi.model.LabelResult;
 import com.clearavenue.fdadi.model.LabelResults;
@@ -8,24 +26,9 @@ import com.clearavenue.fdadi.service.MedicationService;
 import com.clearavenue.fdadi.service.PharmClassService;
 import com.clearavenue.fdadi.service.UserProfileService;
 import com.clearavenue.fdadi.service.VersionService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(FDADIController.class)
+@ActiveProfiles("test")
 public class FDADIControllerTest {
 
 	@Autowired
@@ -78,14 +81,17 @@ public class FDADIControllerTest {
 
 	@Test
 	public void getHomepage() throws Exception {
-		given(userService.findByUserId("demouser")).willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
-		this.mockMvc.perform(get("/homepage").sessionAttr("username", "demouser")).andExpect(status().isOk()).andExpect(view().name("homepage"));
+		given(userService.findByUserId("demouser"))
+				.willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
+		this.mockMvc.perform(get("/homepage").sessionAttr("username", "demouser")).andExpect(status().isOk())
+				.andExpect(view().name("homepage"));
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void getAddMedByNameNotLoggedIn() throws Exception {
-		this.mockMvc.perform(get("/addMedByName").sessionAttr("username", "demouser")).andExpect(status().isOk()).andExpect(view().name("addMedByName"));
+		this.mockMvc.perform(get("/addMedByName").sessionAttr("username", "demouser")).andExpect(status().isOk())
+				.andExpect(view().name("addMedByName"));
 		assertTrue(true, "should always be true");
 	}
 
@@ -103,30 +109,37 @@ public class FDADIControllerTest {
 
 	@Test
 	public void postAddMeds() throws Exception {
-		given(userService.findByUserId("demouser")).willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
-		this.mockMvc.perform(post("/processAddMeds").sessionAttr("username", "demouser").param("selected", "tylenol")).andExpect(status().is3xxRedirection());
+		given(userService.findByUserId("demouser"))
+				.willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
+		this.mockMvc.perform(post("/processAddMeds").sessionAttr("username", "demouser").param("selected", "tylenol"))
+				.andExpect(status().is3xxRedirection());
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void getRemoveMedNotLoggedIn() throws Exception {
-		this.mockMvc.perform(get("/removeMedication/tylenol")).andExpect(status().isOk()).andExpect(view().name("index"));
+		this.mockMvc.perform(get("/removeMedication/tylenol")).andExpect(status().isOk())
+				.andExpect(view().name("index"));
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void getRemoveMed() throws Exception {
-		given(userService.findByUserId("demouser")).willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
-		this.mockMvc.perform(get("/removeMedication/tylenol").sessionAttr("username", "demouser")).andExpect(status().is3xxRedirection());
+		given(userService.findByUserId("demouser"))
+				.willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
+		this.mockMvc.perform(get("/removeMedication/tylenol").sessionAttr("username", "demouser"))
+				.andExpect(status().is3xxRedirection());
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void getMedDetailsNotLoggedIn() throws Exception {
-		final LabelResults lrs = LabelResults.builder().version("1.0").openfda(LabelOpenfda.builder().brandName(List.of("Tylenol")).genericName(List.of("Motrin")).build())
+		final LabelResults lrs = LabelResults.builder().version("1.0")
+				.openfda(LabelOpenfda.builder().brandName(List.of("Tylenol")).genericName(List.of("Motrin")).build())
 				.description(List.of("Used as antibiotic")).adverseReactions(List.of("None")).build();
 		given(medService.getDetails("tylenol")).willReturn(LabelResult.builder().results(List.of(lrs)).build());
-		this.mockMvc.perform(get("/medicationDetails/tylenol")).andExpect(status().isOk()).andExpect(view().name("medicationDetails"));
+		this.mockMvc.perform(get("/medicationDetails/tylenol")).andExpect(status().isOk())
+				.andExpect(view().name("medicationDetails"));
 		assertTrue(true, "should always be true");
 	}
 
@@ -138,22 +151,27 @@ public class FDADIControllerTest {
 
 	@Test
 	public void getMedByPharmClass() throws Exception {
-		given(userService.findByUserId("demouser")).willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
-		this.mockMvc.perform(get("/addMedByPharmClass").sessionAttr("username", "demouser")).andExpect(status().isOk()).andExpect(view().name("addMedByPharmClass"));
+		given(userService.findByUserId("demouser"))
+				.willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
+		this.mockMvc.perform(get("/addMedByPharmClass").sessionAttr("username", "demouser")).andExpect(status().isOk())
+				.andExpect(view().name("addMedByPharmClass"));
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void postMedByPharmClassNotLoggedIn() throws Exception {
-		this.mockMvc.perform(post("/processAddMedByPharmClass")).andExpect(status().isOk()).andExpect(view().name("index"));
+		this.mockMvc.perform(post("/processAddMedByPharmClass")).andExpect(status().isOk())
+				.andExpect(view().name("index"));
 		assertTrue(true, "should always be true");
 	}
 
 	@Test
 	public void postMedByPharmClass() throws Exception {
-		given(userService.findByUserId("demouser")).willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
-		this.mockMvc.perform(post("/processAddMedByPharmClass").sessionAttr("username", "demouser").param("selected", "tylenol")).andExpect(status().isOk())
-				.andExpect(view().name("addMedByName"));
+		given(userService.findByUserId("demouser"))
+				.willReturn(Optional.of(UserProfile.builder().userId("demouser").build()));
+		this.mockMvc.perform(
+				post("/processAddMedByPharmClass").sessionAttr("username", "demouser").param("selected", "tylenol"))
+				.andExpect(status().isOk()).andExpect(view().name("addMedByName"));
 		assertTrue(true, "should always be true");
 	}
 
